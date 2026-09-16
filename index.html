@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nakamoto Bitshock — Galaxy Watch Demo</title>
+  <link rel="stylesheet" href="styles.css?v=demo-clean-2">
+</head>
+<body>
+  <div class="demo-shell">
+    <header class="demo-header">
+      <h1>Nakamoto Bitshock</h1>
+      <p class="subtitle">Galaxy Watch demo — swipe the watch face or use arrow keys</p>
+    </header>
+
+    <div class="controls-bar">
+      <label>
+        Watch size
+        <select id="watch-size">
+          <option value="40">40mm</option>
+          <option value="44" selected>44mm</option>
+          <option value="46">46mm</option>
+        </select>
+      </label>
+      <label>
+        Currency
+        <select id="currency">
+          <option value="USD" selected>USD</option>
+          <option value="EUR">EUR</option>
+          <option value="GBP">GBP</option>
+        </select>
+      </label>
+      <label>
+        Refresh
+        <select id="refresh-interval">
+          <option value="30" selected>30s</option>
+          <option value="60">60s</option>
+          <option value="120">2m</option>
+          <option value="300">5m</option>
+        </select>
+      </label>
+      <label>
+        Block alerts
+        <select id="block-anim-enabled">
+          <option value="on" selected>On (any screen)</option>
+          <option value="off">Off</option>
+        </select>
+      </label>
+      <label>
+        Animation style
+        <select id="block-anim">
+          <option value="combo" selected>Combo (best demo)</option>
+          <option value="ripple">Ripple pulse</option>
+          <option value="flash">Orange flash</option>
+          <option value="tick">Height tick</option>
+          <option value="particles">Particle burst</option>
+        </select>
+      </label>
+      <label>
+        Moving face
+        <select id="face-motion">
+          <option value="off" selected>Off</option>
+          <option value="aurora">Aurora drift</option>
+          <option value="pulse">Pulse</option>
+          <option value="orbit">Orbit dots</option>
+          <option value="sweep">Light sweep</option>
+        </select>
+      </label>
+      <label>
+        Face color
+        <select id="face-color">
+          <option value="#f7931a" selected>Bitcoin orange</option>
+          <option value="#30d158">Green</option>
+          <option value="#0a84ff">Blue</option>
+          <option value="#ff453a">Red</option>
+          <option value="#bf5af2">Purple</option>
+          <option value="#ffd60a">Gold</option>
+          <option value="#64d2ff">Cyan</option>
+          <option value="custom">Custom…</option>
+        </select>
+      </label>
+      <label class="color-label" title="Custom face color">
+        Face custom
+        <input type="color" id="face-color-picker" value="#f7931a">
+      </label>
+      <label>
+        Primary color
+        <select id="primary-color">
+          <option value="#f5f5f7" selected>White</option>
+          <option value="#f7931a">Bitcoin orange</option>
+          <option value="#8e8e93">Gray</option>
+          <option value="#30d158">Green</option>
+          <option value="#0a84ff">Blue</option>
+          <option value="#ff453a">Red</option>
+          <option value="#bf5af2">Purple</option>
+          <option value="#ffd60a">Gold</option>
+          <option value="#64d2ff">Cyan</option>
+          <option value="custom">Custom…</option>
+        </select>
+      </label>
+      <label class="color-label" title="Custom primary text color">
+        Primary custom
+        <input type="color" id="primary-color-picker" value="#f5f5f7">
+      </label>
+      <label>
+        Secondary color
+        <select id="ui-color">
+          <option value="#f7931a" selected>Bitcoin orange</option>
+          <option value="#f5f5f7">White</option>
+          <option value="#8e8e93">Gray</option>
+          <option value="#30d158">Green</option>
+          <option value="#0a84ff">Blue</option>
+          <option value="#ff453a">Red</option>
+          <option value="#bf5af2">Purple</option>
+          <option value="#ffd60a">Gold</option>
+          <option value="#64d2ff">Cyan</option>
+          <option value="custom">Custom…</option>
+        </select>
+      </label>
+      <label class="color-label" title="Custom secondary color (labels & time)">
+        Secondary custom
+        <input type="color" id="ui-color-picker" value="#f7931a">
+      </label>
+      <label>
+        BG dim
+        <select id="face-scrim">
+          <option value="light">Light</option>
+          <option value="medium" selected>Medium</option>
+          <option value="heavy">Heavy</option>
+        </select>
+      </label>
+      <label class="file-label">
+        Background image
+        <input type="file" id="face-image" accept="image/*">
+      </label>
+      <button id="btn-clear-bg" type="button" class="secondary">Clear image</button>
+      <button id="btn-refresh" type="button">Refresh now</button>
+      <button id="btn-simulate-block" type="button">Simulate new block</button>
+    </div>
+
+    <div class="watch-stage">
+      <div class="watch-bezel" id="watch-bezel">
+        <div class="watch-screen" id="watch-screen">
+          <div class="face-bg" id="face-bg" data-motion="off" data-scrim="medium">
+            <div class="face-bg-image" id="face-bg-image"></div>
+            <div class="face-bg-motion" id="face-bg-motion" aria-hidden="true">
+              <span class="orbit-dot"></span>
+              <span class="orbit-dot"></span>
+              <span class="orbit-dot"></span>
+              <span class="orbit-dot"></span>
+              <span class="orbit-dot"></span>
+              <span class="orbit-dot"></span>
+            </div>
+            <div class="face-bg-scrim"></div>
+          </div>
+          <div class="status-bar">
+            <span class="status-time" id="status-time">--:--</span>
+            <span class="status-dot" id="status-dot" title="Connection status"></span>
+          </div>
+
+          <div class="screens" id="screens">
+            <!-- Screen 0: Price -->
+            <section class="screen active" data-screen="price">
+              <div class="screen-label">BTC / USD</div>
+              <div class="price-value" id="btc-price">—</div>
+              <div class="price-change" id="btc-change">—</div>
+              <div class="screen-hint">Swipe for more</div>
+            </section>
+
+            <!-- Screen 1: Block -->
+            <section class="screen" data-screen="block">
+              <div class="screen-label">Block Height</div>
+              <div class="metric-value" id="block-height">—</div>
+              <div class="metric-sub" id="block-time">—</div>
+              <div class="dots" id="dots-block"></div>
+            </section>
+
+            <!-- Screen 2: Mempool -->
+            <section class="screen" data-screen="mempool">
+              <div class="screen-label">Mempool</div>
+              <div class="metric-value" id="mempool-count">—</div>
+              <div class="metric-sub">pending txs</div>
+              <div class="metric-stats">
+                <div class="metric-row">
+                  <span>Size</span>
+                  <span id="mempool-size">—</span>
+                </div>
+                <div class="metric-row">
+                  <span>Total fees</span>
+                  <span id="mempool-fees">—</span>
+                </div>
+              </div>
+            </section>
+
+            <!-- Screen 3: Fees -->
+            <section class="screen" data-screen="fees">
+              <div class="screen-label">Fee Rates</div>
+              <div class="fee-grid">
+                <div class="fee-item">
+                  <span class="fee-label">Fast</span>
+                  <span class="fee-value" id="fee-fast">—</span>
+                  <span class="fee-unit">sat/vB</span>
+                </div>
+                <div class="fee-item">
+                  <span class="fee-label">30 min</span>
+                  <span class="fee-value" id="fee-half">—</span>
+                  <span class="fee-unit">sat/vB</span>
+                </div>
+                <div class="fee-item">
+                  <span class="fee-label">1 hour</span>
+                  <span class="fee-value" id="fee-hour">—</span>
+                  <span class="fee-unit">sat/vB</span>
+                </div>
+                <div class="fee-item">
+                  <span class="fee-label">Economy</span>
+                  <span class="fee-value" id="fee-econ">—</span>
+                  <span class="fee-unit">sat/vB</span>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div class="page-indicator" id="page-indicator">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+          </div>
+
+          <div class="last-updated" id="last-updated">Loading…</div>
+
+          <div class="error-banner hidden" id="error-banner">
+            <span id="error-text">Connection error</span>
+          </div>
+
+          <div class="loading-overlay hidden" id="loading-overlay">
+            <div class="spinner"></div>
+          </div>
+
+          <!-- Block confirmation effects (watch-safe) -->
+          <div class="block-fx" id="block-fx" aria-hidden="true">
+            <div class="block-ripple"></div>
+            <div class="block-ripple delay"></div>
+            <div class="block-particles" id="block-particles"></div>
+            <div class="block-toast" id="block-toast">
+              <span class="toast-label">NEW BLOCK</span>
+              <span class="toast-height" id="toast-height">—</span>
+            </div>
+          </div>
+        </div>
+
+        <button class="bezel-btn crown" aria-label="Refresh" id="crown-btn" title="Tap crown to refresh"></button>
+      </div>
+
+      <div class="nav-hints">
+        <button type="button" id="nav-prev" aria-label="Previous screen">‹</button>
+        <span id="screen-name">Price</span>
+        <button type="button" id="nav-next" aria-label="Next screen">›</button>
+      </div>
+    </div>
+
+    <footer class="demo-footer">
+      <p>Live data from <a href="https://mempool.space" target="_blank" rel="noopener">mempool.space</a>, refreshed on the watch. Browser demo — real app would use Wear OS + Jetpack Compose.</p>
+    </footer>
+  </div>
+
+  <script src="app.js?v=demo-clean-2"></script>
+</body>
+</html>
