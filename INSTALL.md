@@ -112,18 +112,6 @@ More detail: [wear/MAIN_VIEW.md](wear/MAIN_VIEW.md)
 
 ---
 
-## Web demo (optional, on a computer)
-
-From the **repo root** (not `wear/`):
-
-```bash
-python3 server.py
-```
-
-Open `http://localhost:8080` in a browser. This does not install anything on the watch.
-
----
-
 ## Notes
 
 - **Sideload / dev build** — not distributed via Google Play in this repo.

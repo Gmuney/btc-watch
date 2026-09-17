@@ -6,7 +6,6 @@ credentials.json
 
 __pycache__/
 *.pyc
-.Python
 
 .DS_Store
 .idea/
