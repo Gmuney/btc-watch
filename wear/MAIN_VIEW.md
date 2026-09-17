@@ -1,41 +1,36 @@
 # Nakamoto Bitshock — live dashboard as your main watch view
 
-Watch Face Studio cannot run your mempool API or swipe dashboard. The **`wear/`** project now ships **the same live data** as a **selectable watch face** (code-based face, sideloaded with Android Studio).
+Code-based **watch face** + **launcher app** with live mempool data (sideload via Android Studio). See [../INSTALL.md](../INSTALL.md) for full steps.
 
-You can close Watch Face Studio for this path.
+## Compatibility
+
+- **Samsung Galaxy Watch 4 or newer** (recommended; tested on Watch 4 44mm).
+- **Wear OS 3+** on the watch (API 30+). Built with **target/compile SDK 35**.
 
 ## What you get
 
-- **Home screen face** with live BTC price, block, mempool, fees (same four views as the demo)
-- **Orange orbit dots**, block **NEW BLOCK** flash, 30s refresh + block WebSocket
-- **Tap left / right** on the face to change page (like swiping in the app)
+- **Home screen face** with live BTC price, block, mempool, fees (four pages)
+- **Orange orbit dots**, **NEW BLOCK** flash, **5-minute** background refresh + block WebSocket
+- **Tap left / right** on the face to change page
 - **Double-tap** to refresh now
-- **Launcher app** still installed — full Compose UI, double-tap refresh, long-press simulate block (for testing)
+- **Launcher app** — full Compose UI, swipe pages, long-press simulate block (testing)
 
-## Install (Galaxy Watch 4, wireless debugging)
+## Install
 
-1. Copy the `wear/` folder to your PC.
-2. Open **`wear/`** in Android Studio (install Wear OS SDK if prompted).
-3. On the watch: **Settings → About → Software** tap build number → **Developer options** → **ADB debugging** + **Wireless debugging** → pair/connect (note IP and port).
-4. Terminal: `adb connect WATCH_IP:PORT`
-5. **Run** the `app` configuration on the watch.
+Follow [INSTALL.md](../INSTALL.md) (wireless debugging, Run **`app`**, set face in picker).
 
 ## Set as main view
 
-1. Long-press the current watch face → **Browse faces** (or swipe to face picker).
-2. Choose **Nakamoto Bitshock** (same name as the app).
-3. Confirm — this is now what you see when you wake the watch.
+1. Long-press the current watch face → **Browse faces**
+2. Choose **Nakamoto Bitshock**
+3. Wake the watch to see the live dashboard face
 
-If the face does not appear in the list, reboot the watch once after install.
+If the face does not appear, reboot the watch once after install.
 
-## Battery (honest note)
+## Battery
 
-Live network + animation on the **always-visible face** uses more battery than a static clock. Ambient / always-on shows **time + price only** with no orbit animation. For all-day wear, consider using the face during the day and a minimal Samsung face at night until we add a phone companion for background alerts.
-
-## Watch Face Studio
-
-Use WFS only if you want a **second**, static decorative face. It cannot replace this dashboard for live data.
+Live network + animation on the always-visible face uses more battery than a static clock. Ambient / always-on shows **time + price** with no orbit animation.
 
 ## Technical note
 
-This uses the AndroidX **WatchFaceService** API (legacy but still sideloadable on Galaxy Watch 4). Google’s newer **Watch Face Format** (XML) does not support this kind of live API dashboard; that’s why the implementation lives in Kotlin in this repo.
+Uses AndroidX **WatchFaceService** (legacy API, still sideloadable on Galaxy Watch 4+). Google’s **Watch Face Format** (XML) does not support this kind of live API dashboard.

@@ -6,9 +6,20 @@ Sideload guide for the **Wear OS app + live watch face**. No Play Store required
 
 ---
 
+## Compatibility
+
+- **Recommended:** **Samsung Galaxy Watch 4 or newer** (Galaxy Watch 4, 5, 6, Ultra, …).
+- **Tested on:** Galaxy Watch 4 **44mm** (450×450 round display).
+- **Wear OS version:** watch must run **Wear OS 3+** (**Android API 30+**). Galaxy Watch 4 shipped with Wear OS 3; newer models run Wear OS 4 or 5.
+- **This project is built with:** **compileSdk / targetSdk 35** (install **Android API 35** platform in SDK Manager if Gradle asks), **minSdk 30**.
+
+Other Wear OS 3+ devices may work; pre–Watch 4 Samsung (Tizen) watches cannot run this app.
+
+---
+
 ## What you need
 
-- A **Wear OS watch** (tested on Galaxy Watch 4 44mm; min Android API 30)
+- A compatible watch (see **Compatibility** above)
 - A **Windows or Mac PC** with [Android Studio](https://developer.android.com/studio)
 - **Wi‑Fi** on watch and PC (same network for wireless install)
 - Watch can reach the internet (live data from [mempool.space](https://mempool.space))
