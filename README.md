@@ -14,10 +14,10 @@ python3 server.py
 
 ## Wear OS (sideload)
 
-Open the `wear/` folder in **Android Studio**, run on your watch (wireless debugging).
+**Start here:** [INSTALL.md](INSTALL.md) — step-by-step for Android Studio, watch pairing, Run, and setting the face.
 
 - **App:** four swipe screens, live price / block / mempool / fees, block celebration
-- **Watch face:** same live data on the home screen — see [wear/MAIN_VIEW.md](wear/MAIN_VIEW.md)
+- **Watch face:** same live data on the home screen — see also [wear/MAIN_VIEW.md](wear/MAIN_VIEW.md)
 
 Package: `com.nakamoto.bitshock`
 
