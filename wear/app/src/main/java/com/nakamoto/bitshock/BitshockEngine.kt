@@ -55,7 +55,7 @@ class BitshockEngine(
         listenForBlocks()
         pollJob = scope.launch(Dispatchers.IO) {
             while (isActive) {
-                delay(30_000)
+                delay(300_000) // Poll every 5 minutes to preserve battery life
                 refreshQuiet()
             }
         }

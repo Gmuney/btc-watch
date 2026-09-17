@@ -1,7 +1,9 @@
 package com.nakamoto.bitshock
 
 import android.view.SurfaceHolder
+import androidx.wear.watchface.ComplicationSlot
 import androidx.wear.watchface.ComplicationSlotsManager
+import androidx.wear.watchface.TapEvent
 import androidx.wear.watchface.TapType
 import androidx.wear.watchface.WatchFace
 import androidx.wear.watchface.WatchFaceService
@@ -38,17 +40,23 @@ class BitshockWatchFaceService : WatchFaceService() {
 
         var lastTapMs = 0L
 
-        return WatchFace(WatchFaceType.DIGITAL, renderer).setTapListener { tapType, tapEvent, _ ->
-            if (tapType != TapType.UP) return@setTapListener
-            val now = System.currentTimeMillis()
-            if (now - lastTapMs < 350) {
-                engine.refresh()
-                lastTapMs = 0L
-                return@setTapListener
+        return WatchFace(WatchFaceType.DIGITAL, renderer).setTapListener(object : WatchFace.TapListener {
+            override fun onTapEvent(
+                tapType: Int,
+                tapEvent: TapEvent,
+                complicationSlot: ComplicationSlot?,
+            ) {
+                if (tapType != TapType.UP) return
+                val now = System.currentTimeMillis()
+                if (now - lastTapMs < 350) {
+                    engine.refresh()
+                    lastTapMs = 0L
+                    return
+                }
+                lastTapMs = now
+                val mid = renderer.lastBounds.width() / 2f
+                if (tapEvent.xPos < mid) engine.prevPage() else engine.nextPage()
             }
-            lastTapMs = now
-            val mid = renderer.lastBounds.width() / 2f
-            if (tapEvent.xPos < mid) engine.prevPage() else engine.nextPage()
-        }
+        })
     }
 }

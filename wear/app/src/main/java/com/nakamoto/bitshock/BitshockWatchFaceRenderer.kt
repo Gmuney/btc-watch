@@ -9,11 +9,9 @@ import android.view.SurfaceHolder
 import androidx.wear.watchface.CanvasType
 import androidx.wear.watchface.ComplicationSlotsManager
 import androidx.wear.watchface.DrawMode
-import androidx.wear.watchface.RenderParameters
 import androidx.wear.watchface.Renderer
 import androidx.wear.watchface.WatchState
 import androidx.wear.watchface.style.CurrentUserStyleRepository
-import java.time.Instant
 import java.time.ZonedDateTime
 import kotlin.math.cos
 import kotlin.math.min
@@ -23,15 +21,14 @@ class BitshockWatchFaceRenderer(
     private val engine: BitshockEngine,
     surfaceHolder: SurfaceHolder,
     watchState: WatchState,
-    complicationSlotsManager: ComplicationSlotsManager,
+    @Suppress("unused") complicationSlotsManager: ComplicationSlotsManager,
     currentUserStyleRepository: CurrentUserStyleRepository,
-) : Renderer.CanvasRenderer2(
-    surfaceHolder,
-    currentUserStyleRepository,
-    watchState,
-    complicationSlotsManager,
-    Instant.now(),
-    CanvasType.HARDWARE,
+) : Renderer.CanvasRenderer(
+    surfaceHolder = surfaceHolder,
+    currentUserStyleRepository = currentUserStyleRepository,
+    watchState = watchState,
+    canvasType = CanvasType.HARDWARE,
+    interactiveDrawModeUpdateDelayMillis = 16L,
 ) {
     private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { color = 0xFF0B0B0F.toInt() }
     private val accentPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -66,11 +63,14 @@ class BitshockWatchFaceRenderer(
         super.onDestroy()
     }
 
+    override fun renderHighlightLayer(canvas: Canvas, bounds: Rect, zonedDateTime: ZonedDateTime) {
+        // No highlight layer rendering needed
+    }
+
     override fun render(
         canvas: Canvas,
         bounds: Rect,
         zonedDateTime: ZonedDateTime,
-        renderParameters: RenderParameters,
     ) {
         lastBounds.set(bounds)
         val cx = bounds.exactCenterX()
@@ -105,7 +105,7 @@ class BitshockWatchFaceRenderer(
                     value = state.priceUsd?.let { BitshockFormatting.formatPrice(it) }
                         ?: BitshockFormatting.loadingOrDash(state),
                     sub = when {
-                        state.error != null -> state.error!!
+                        state.error != null -> requireNotNull(state.error)
                         state.priceUsd != null -> "Live · swipe sides"
                         else -> "Loading…"
                     },
@@ -134,9 +134,10 @@ class BitshockWatchFaceRenderer(
             drawPageDots(canvas, cx, bounds.bottom - 28f * scale, scale, engine.currentPage)
         }
 
-        if (state.celebratingHeight != null && !ambient) {
+        val celebrating = state.celebratingHeight
+        if (celebrating != null && !ambient) {
             canvas.drawRect(bounds, flashPaint)
-            drawCelebration(canvas, cx, cy, scale, state.celebratingHeight!!)
+            drawCelebration(canvas, cx, cy, scale, celebrating)
         }
 
         if (!ambient) {
