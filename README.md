@@ -29,4 +29,4 @@ Public mempool.space APIs (no API key). The watch needs network access for live 
 
 ## License
 
-Private / all rights reserved unless you add a license file.
+[MIT License](LICENSE) — free to use, modify, and share; include the copyright notice in copies.

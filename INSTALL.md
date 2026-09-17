@@ -127,4 +127,4 @@ More detail: [wear/MAIN_VIEW.md](wear/MAIN_VIEW.md)
 
 - **Sideload / dev build** — not distributed via Google Play in this repo.
 - **Battery:** live network on the always-visible face uses more power than a static clock; background refresh is every 5 minutes (blocks still update via WebSocket when possible).
-- **License:** see [README.md](README.md) — no public license file yet; ask the repo owner before redistributing.
+- **License:** [MIT](LICENSE) — open source; see [README.md](README.md).
